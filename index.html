@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  </head>
+  <body>
+    <h1>Ola Mundo !</h1>
+    <script>
+    
+      function checkClimate(planet, climateStr) {
+        return  planet.climate.includes(climateStr);
+      }
+
+      let p = fetch("https://swapi.dev/api/planets/?page=2")
+        .then((reponse) => reponse.json())
+        .then((data) => {
+          let planets = data.results;
+          console.log("Lista de planetas: ", planets);
+          // for (planet in planets) {
+        
+         
+          // }
+          let frozenPlanets = planets.filter((planet) =>
+            checkClimate(planet, "frozen")//planet.climate.includes("frozen")
+          );
+          console.log("Frozen planetas:", frozenPlanets);
+
+
+          let temperatePlanetsMap = planets.map((planet) =>
+          checkClimate(planet, "temperate")//planet.climate.includes("temperate")
+          );
+
+
+          let temperateReduce = planets.reduce((acc, planet) => {
+              return checkClimate(planet, "temperate") ? acc + 1 : acc;
+          }, 0)
+
+          console.log("Map temperate planetas:", temperatePlanetsMap, "Contagem", temperateReduce);
+        })
+
+        .catch((e) => console.log(e));
+
+      async function callAnync() {
+        try {
+          let res = await fetch("https://swapi.dev/api/people/?page=2");
+          let speciesList = await res.json();
+          console.log("Lista de Pessoas");
+          let people = speciesList.results
+          console.log(people);
+          let greenSkin = people.filter(person => person.skin_color.includes("green"))
+          console.log("Pele Verde", greenSkin); 
+
+          let bigMass = people.filter(person => parseInt(person.mass) > 100)
+          console.log("Massa maior que 100:", bigMass); 
+
+          let bigHeight = people.filter(person => parseInt(person.height) > 180)
+          console.log("Massa maior que 100:", bigHeight); 
+
+          let allNames = people.map(person => person.name + ',')
+          
+          console.log("Todos os nomes:", allNames); 
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      setTimeout(() => callAnync(), 1000)
+      //callAnync();
+    </script>
+  </body>
+</html>
